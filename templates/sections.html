@@ -11,60 +11,41 @@
     <div class="bg-[#1e1e1e] rounded-2xl p-6 shadow-lg border border-gray-700 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="text-xl font-semibold text-white">📘 {{ section.title }}</h3>
+        {% if section.completed %}
         <span class="bg-green-600 text-xs font-bold px-3 py-1 rounded-full text-white">✔ Completed</span>
+        {% else %}
+          {% if section.completed_words != 0 %}
+            <span class="bg-yellow-500 text-xs font-bold px-3 py-1 rounded-full text-black">⏳ In Progress</span>
+          {% endif %}
+        {% endif %}
       </div>
   
       <!-- 📊 Progress Bar -->
       <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-        <div class="bg-yellow-400 h-3 rounded-full" style="width: 100%"></div>
+        <div class="bg-yellow-400 h-3 rounded-full" style="width: {{ section.progress_percentage }}%"></div>
       </div>
-      <p class="text-sm text-gray-400">10 / 10 word packs completed</p>
+      <p class="text-sm text-gray-400">{{ section.completed_words }}/{{ section.total_words }} words completed</p>
   
       <!-- ✅ Action -->
       <div class="text-right">
-        <a href="{% url 'learn' section.pk %}" class="bg-[#4FC3F7] text-black font-semibold px-4 py-2 rounded-lg hover:bg-[#29B6F6] transition inline-block">🔁 Review</a>
+        {% if section.locked %}
+          <span class="inline-block bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg cursor-not-allowed">
+            🔒 Locked
+          </span>
+        {% else %}
+          {% if section.completed %}
+          <a href="{% url 'learn' section.pk %}" class="bg-[#4FC3F7] text-black font-semibold px-4 py-2 rounded-lg hover:bg-[#29B6F6] transition inline-block">🔁 Review</a>
+          {% else %}
+            {% if section.completed_words != 0 %}
+              <a href="{% url 'learn' section.pk %}" class="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-yellow-300 transition inline-block">▶️ Continue</a>
+            {% else %}
+              <a href="{% url 'learn' section.pk %}" class="bg-green-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-green-300 transition inline-block">▶️ Start</a>
+            {% endif %}
+          {% endif %}
+        {% endif %}
       </div>
     </div>
-    {% endfor %}
-  
-    <!-- 🔹 Section Card (Incomplete) -->
-    <div class="bg-[#1e1e1e] rounded-2xl p-6 shadow-lg border border-gray-700 space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-xl font-semibold text-white">📙 Section 2</h3>
-        <span class="bg-yellow-500 text-xs font-bold px-3 py-1 rounded-full text-black">⏳ In Progress</span>
-      </div>
-  
-      <!-- 📊 Progress Bar -->
-      <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-        <div class="bg-yellow-400 h-3 rounded-full" style="width: 40%"></div>
-      </div>
-      <p class="text-sm text-gray-400">4 / 10 word packs completed</p>
-  
-      <!-- ▶️ Action -->
-      <div class="text-right">
-        <a href="" class="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-yellow-300 transition inline-block">▶️ Continue</a>
-      </div>
-    </div>
-  
-    <!-- 🔹 Section Card (Incomplete) -->
-    <div class="bg-[#1e1e1e] rounded-2xl p-6 shadow-lg border border-gray-700 space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-xl font-semibold text-white">📕 Section 3</h3>
-        <span class="bg-yellow-500 text-xs font-bold px-3 py-1 rounded-full text-black">⏳ In Progress</span>
-      </div>
-  
-      <!-- 📊 Progress Bar -->
-      <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-        <div class="bg-yellow-400 h-3 rounded-full" style="width: 70%"></div>
-      </div>
-      <p class="text-sm text-gray-400">7 / 10 word packs completed</p>
-  
-      <!-- ▶️ Action -->
-      <div class="text-right">
-        <a href="" class="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-yellow-300 transition inline-block">▶️ Continue</a>
-      </div>
-    </div>
-  
+    {% endfor %}  
   </main>
   
 {% endblock content %}

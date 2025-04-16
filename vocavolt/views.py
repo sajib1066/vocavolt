@@ -27,9 +27,42 @@ class SectionsPageView(View):
     template_name = 'sections.html'
 
     def get(self, request, *args, **kwargs):
-        sections = Section.objects.all()
+        sections = Section.objects.all().order_by('order')  # Make sure sections are ordered
+        section_data = []
+
+        previous_completed = True  # First section should be unlocked
+
+        for section in sections:
+            wordpacks = WordPack.objects.filter(section=section)
+            all_words = Word.objects.filter(word_pack__in=wordpacks)
+            total_words = all_words.count()
+
+            completed_words = UserWordProgress.objects.filter(
+                user=request.user,
+                word__in=all_words
+            ).count()
+
+            is_completed = total_words > 0 and completed_words == total_words
+            progress_percentage = int((completed_words / total_words) * 100) if total_words else 0
+
+            # Section is locked if the previous one was not completed
+            is_locked = not previous_completed
+
+            section_data.append({
+                'pk': section.pk,
+                'title': section.title,
+                'completed': is_completed,
+                'locked': is_locked,
+                'completed_words': completed_words,
+                'total_words': total_words,
+                'progress_percentage': progress_percentage,
+            })
+
+            # Update previous_completed for the next loop
+            previous_completed = is_completed
+
         context = {
-            'sections': sections
+            'sections': section_data
         }
         return render(request, self.template_name, context)
 
