@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 
 
-from flashcards.models import Section, WordPack, Quiz, Word, UserWordProgress
+from flashcards.models import Section, WordPack, Quiz, Question, Word, UserWordProgress
 
 class HomePageView(View):
     """ Home view """
@@ -120,8 +120,8 @@ class LearningPageView(LoginRequiredMixin, View):
                     'title': quiz.title,
                     'desc': f'Test your {wordpack.title} knowledge',
                     'number': f'Q{index + 1}',
-                    'url': 'flashcard',
-                    'pk': wordpack.pk,
+                    'url': 'quiz',
+                    'pk': quiz.pk,
                     'completed': is_quiz_completed,
                     'locked': not previous_completed,
                     'progress': 0,
@@ -184,6 +184,25 @@ class FlashCardPageView(LoginRequiredMixin, View):
             },
             "current_index": index,
             "total_flashcards": len(all_flashcards)
+        }
+        return render(request, self.template_name, context)
+
+
+class QuizPageView(LoginRequiredMixin, View):
+    """Quiz page view"""
+    template_name = 'quiz.html'
+
+    def get(self, request, *args, **kwargs):
+        # Get the quiz using the pk passed in the URL
+        quiz = Quiz.objects.get(pk=self.kwargs.get('pk'))
+        
+        # Get all questions related to the quiz
+        questions = Question.objects.filter(quiz=quiz)
+        
+        # Pass the quiz and questions to the context
+        context = {
+            'quiz': quiz,
+            'questions': questions
         }
         return render(request, self.template_name, context)
 

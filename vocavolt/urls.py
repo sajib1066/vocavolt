@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, update_word_progress
+from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, update_word_progress, QuizPageView
 
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     path('section/<int:pk>/learn/', LearningPageView.as_view(), name='learn'),
     path('sections/', SectionsPageView.as_view(), name='sections'),
     path('wordpack/<int:pk>/flashcard/', FlashCardPageView.as_view(), name='flashcard'),
+    path('wordpack/<int:pk>/quiz/', QuizPageView.as_view(), name='quiz'),
     path('update_word_progress/', update_word_progress, name='update_word_progress'),
     path('auth/', include('customauth.urls')),
     path('dashboard/', include('dashboard.urls')),
