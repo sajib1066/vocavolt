@@ -47,6 +47,7 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 ]
 
 THIRD_PARTY_APPS = [
@@ -96,6 +97,7 @@ WSGI_APPLICATION = 'vocavolt.wsgi.application'
 
 AUTH_USER_MODEL = 'customauth.User'
 
+SITE_ID = 1
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
