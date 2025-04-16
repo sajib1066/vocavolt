@@ -1,5 +1,4 @@
 asgiref==3.8.1
 Django==4.2.20
-djangorestframework==3.16.0
 pillow==11.2.1
 sqlparse==0.5.3

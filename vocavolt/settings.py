@@ -50,8 +50,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    # https://www.django-rest-framework.org/#installation
-    'rest_framework',
+    
 ]
 
 LOCAL_APPS = [
