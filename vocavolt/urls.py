@@ -17,8 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+from django.views.generic.base import TemplateView
 
 from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, update_word_progress, QuizPageView
+from .sitemaps import (
+    StaticViewSitemap, SectionSiteMap,
+)
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
 
 
 urlpatterns = [
@@ -31,6 +40,17 @@ urlpatterns = [
     path('update_word_progress/', update_word_progress, name='update_word_progress'),
     path('', include('customauth.urls')),
     path('dashboard/', include('dashboard.urls')),
+
+    # sitemap
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
+
+    # robots.txt
+    path(
+        'robots.txt',
+        TemplateView.as_view(
+            template_name="pages/robots.txt", content_type="text/plain"
+        )
+    ),
 ]
 
 # serve media files in development environment --------------------------------

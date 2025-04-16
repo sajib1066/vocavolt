@@ -14,6 +14,9 @@ class Section(models.Model):
     def __str__(self):
         return f"Section {self.order}: {self.title}"
 
+    def get_absolute_url(self):
+        return f'/section/{self.pk}/learn/'
+
 
 class WordPack(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='wordpacks')
