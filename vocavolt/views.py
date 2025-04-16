@@ -52,6 +52,7 @@ class SectionsPageView(LoginRequiredMixin, View):
             section_data.append({
                 'pk': section.pk,
                 'title': section.title,
+                'description': section.description,
                 'completed': is_completed,
                 'locked': is_locked,
                 'completed_words': completed_words,
