@@ -1,0 +1,160 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<main class="flex-grow flex flex-col items-center px-4 py-8">
+
+  <!-- 📦 Flashcard Container Box -->
+  <div class="w-full max-w-6xl bg-white/10 backdrop-blur border border-gray-700 rounded-2xl shadow-xl px-6 py-8 space-y-6">
+
+    <!-- 🎴 Flashcard Stack with Flip -->
+    <div class="relative w-full max-w-md h-[240px] mx-auto perspective">
+      {% with card=flashcards.current %}
+      <div class="relative w-full h-full transition-transform duration-700 transform-style-preserve-3d" id="flashcard" onclick="flipCard('{{ card.id }}')">
+
+        <!-- Front Side -->
+        <div class="absolute w-full h-full backface-hidden bg-gradient-to-br from-[#fffefc] to-[#f5f5f5] text-black rounded-3xl p-6 flex flex-col justify-between shadow-2xl border-2 border-yellow-300">
+          <div class="flex justify-between items-center text-xl text-gray-600 mb-1">
+            <button class="hover:scale-110 transition" title="Bookmark">🔖</button>
+            <button onclick="event.stopPropagation(); playAudio('{{ card.word }}')" class="hover:scale-110 transition" title="Play audio">🔊</button>
+          </div>
+          <div class="text-center text-4xl sm:text-5xl font-bold text-gray-900 tracking-wide">
+            {{ card.word }}
+          </div>
+          <div class="text-center text-sm text-gray-500 italic">Tap to flip</div>
+        </div>
+
+        <!-- Back Side -->
+        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-white text-black rounded-3xl p-6 flex flex-col justify-between shadow-xl border border-gray-400">
+          <div>
+            <div class="text-center text-lg font-semibold text-gray-800 mb-2">
+              {{ card.word }}
+            </div>
+            <div class="text-center text-sm text-gray-600 italic mb-2">
+              ({{ card.part_of_speech }}) {{ card.translation }}
+            </div>
+            {% if card.description %}
+            <div class="text-center text-xs text-gray-700">
+              {{ card.description }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="text-center text-sm text-gray-500 italic">Tap to flip back</div>
+        </div>
+
+      </div>
+      {% endwith %}
+    </div>
+
+    <!-- 🔁 Navigation Buttons & Progress -->
+    <div class="flex items-center justify-center space-x-6">
+      {% if current_index > 0 %}
+      <a href="?index={{ current_index|add:'-1' }}" class="bg-[#FFD54F] text-black px-4 py-2 rounded-xl font-semibold text-sm hover:bg-yellow-300 transition">
+        ‹ পূর্ববর্তী
+      </a>
+      {% else %}
+      <span class="bg-gray-300 text-white px-4 py-2 rounded-xl font-semibold text-sm opacity-50 cursor-not-allowed">
+        ‹ পূর্ববর্তী
+      </span>
+      {% endif %}
+
+      <div class="text-sm text-gray-500 font-medium">{{ current_index|add:'1' }} / {{ total_flashcards }}</div>
+
+      {% if current_index < total_flashcards|add:'-1' %}
+      <a href="?index={{ current_index|add:'1' }}" class="bg-[#FFD54F] text-black px-4 py-2 rounded-xl font-semibold text-sm hover:bg-yellow-300 transition">
+        পরবর্তী ›
+      </a>
+      {% else %}
+      <span class="bg-gray-300 text-white px-4 py-2 rounded-xl font-semibold text-sm opacity-50 cursor-not-allowed">
+        পরবর্তী ›
+      </span>
+      {% endif %}
+    </div>
+
+    <!-- 🧠 Toggle Examples Button -->
+    <div class="flex justify-center">
+      <button onclick="toggleExamples()" class="mt-4 px-6 py-2 bg-[#4FC3F7] text-black font-semibold rounded-xl hover:bg-[#29B6F6] transition">
+        উদাহরণ বাক্যগুলি লুকান
+      </button>
+    </div>
+
+    <!-- 💬 Example Sentences -->
+    <div id="exampleBox" class="bg-white text-gray-800 mt-4 rounded-2xl p-5 shadow-inner space-y-4 text-sm max-w-md mx-auto">
+      {% for sentence in flashcards.current.examples %}
+        <p><strong>বাক্য {{ forloop.counter }}:</strong> {{ sentence|safe }}</p>
+      {% endfor %}
+    </div>
+
+  </div> <!-- End container box -->
+
+</main>
+
+<!-- Flip Card Style -->
+<style>
+  .perspective {
+    perspective: 1000px;
+  }
+
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+
+  #flashcard {
+    transform: rotateY(0deg);
+    cursor: pointer;
+  }
+</style>
+
+<!-- Flip & Audio Script -->
+<script>
+  let flipped = false;
+
+  function flipCard(wordId) {
+    const card = document.getElementById('flashcard');
+    flipped = !flipped;
+    card.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+
+    // Update progress after flip
+    updateWordProgress(wordId);
+  }
+
+  function playAudio(word) {
+    const msg = new SpeechSynthesisUtterance(word);
+    window.speechSynthesis.speak(msg);
+  }
+
+  function toggleExamples() {
+    const box = document.getElementById('exampleBox');
+    const btn = document.querySelector('button[onclick="toggleExamples()"]');
+    const isHidden = box.style.display === 'none';
+    box.style.display = isHidden ? 'block' : 'none';
+    btn.innerText = isHidden ? 'উদাহরণ বাক্যগুলি লুকান' : 'উদাহরণ বাক্যগুলি দেখান';
+  }
+
+  function updateWordProgress(wordId) {
+    console.log('WORD ID', wordId);
+    fetch("{% url 'update_word_progress' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: JSON.stringify({
+            word_id: wordId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.success || data.error);
+    })
+    .catch(error => console.error('Error:', error));
+  }
+</script>
+{% endblock content %}

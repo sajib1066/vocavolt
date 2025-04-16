@@ -1,0 +1,144 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<main id="map" class="py-16 px-4">
+  <div class="max-w-2xl mx-auto">
+    <!-- 🔙 Back Button -->
+    <div class="mb-6">
+      <a href="{% url 'sections' %}" class="inline-flex items-center text-yellow-400 hover:text-yellow-500 font-semibold text-sm">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Sections
+      </a>
+    </div>
+
+    <h2 class="text-3xl sm:text-4xl font-bold text-yellow-400 mb-12 text-center">Learning Path of {{ section.title }}</h2>
+
+    <!-- Vertical Timeline -->
+    <div class="relative">
+      <!-- Central Line -->
+      <div class="absolute left-1/2 w-1 bg-yellow-400 h-full"></div>
+
+      <!-- Map Items -->
+      <div class="space-y-4">
+        {% for item in learning_path %}
+          <div class="relative flex items-center justify-between">
+
+            {% if item.locked %}
+              <!-- 🔒 LOCKED STEP -->
+              {% if item.type == 'word_pack' %}
+                <div class="w-1/2 pr-8 text-right">
+                  <div class="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                    <h3 class="text-xl font-semibold text-gray-500">{{ item.title }}</h3>
+                    <p class="text-gray-600 mt-2">{{ item.desc }}</p>
+                    <button class="mt-4 inline-block bg-gray-700 text-gray-500 px-4 py-2 rounded-md cursor-not-allowed">Locked</button>
+                  </div>
+                </div>
+                <div class="w-12 h-12 bg-gray-700 rounded-full absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+                  <span class="text-gray-500 font-bold">{{ item.number }}</span>
+                </div>
+                <div class="w-1/2"></div>
+              {% else %}
+                <div class="w-1/2"></div>
+                <div class="w-12 h-12 bg-gray-700 rounded-full absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+                  <span class="text-gray-500 font-bold">{{ item.number }}</span>
+                </div>
+                <div class="w-1/2 pl-8">
+                  <div class="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                    <h3 class="text-xl font-semibold text-gray-500">{{ item.title }}</h3>
+                    <p class="text-gray-600 mt-2">{{ item.desc }}</p>
+                    <button class="mt-4 inline-block bg-gray-700 text-gray-500 px-4 py-2 rounded-md cursor-not-allowed">Locked</button>
+                  </div>
+                </div>
+              {% endif %}
+
+            {% else %}
+              <!-- ✅ COMPLETED OR 🔓 CURRENT STEP -->
+              {% if item.type == 'word_pack' %}
+                <div class="w-1/2 pr-8 text-right">
+                  <div class="p-6 rounded-lg transition hover:-translate-y-1
+                    {% if item.completed %}
+                      bg-green-800 shadow-lg hover:shadow-green-400
+                    {% else %}
+                      bg-gray-900 shadow-lg hover:shadow-yellow-400
+                    {% endif %}
+                  ">
+                    <h3 class="text-xl font-semibold {% if item.completed %}text-green-400{% else %}text-yellow-400{% endif %}">
+                      {{ item.title }}
+                    </h3>
+                    <p class="text-gray-400 mt-2">{{ item.desc }}</p>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-4">
+                      <div class="bg-green-400 h-2 rounded-full" style="width: {{ item.progress }}%;"></div>
+                    </div>
+
+                    <!-- Display Progress as X/10 -->
+                    <div class="text-sm text-gray-300 mt-2">{{ item.completed_words }}/{{ item.total_words }} Completed</div>
+
+                    {% if item.completed %}
+                      <a href="{% url item.url pk=item.pk %}" class="mt-4 inline-block bg-green-500 text-black px-4 py-2 rounded-md hover:bg-green-400 transition">Review</a>
+                    {% else %}
+                      <a href="{% url item.url pk=item.pk %}" class="mt-4 inline-block bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition">Start</a>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="w-12 h-12 rounded-full absolute left-1/2 -translate-x-1/2 flex items-center justify-center
+                  {% if item.completed %}
+                    bg-green-400
+                  {% else %}
+                    bg-yellow-400
+                  {% endif %}
+                ">
+                  <span class="text-black font-bold">{{ item.number }}</span>
+                </div>
+                <div class="w-1/2"></div>
+              {% else %}
+                <div class="w-1/2"></div>
+                <div class="w-12 h-12 rounded-full absolute left-1/2 -translate-x-1/2 flex items-center justify-center
+                  {% if item.completed %}
+                    bg-green-400
+                  {% else %}
+                    bg-yellow-400
+                  {% endif %}
+                ">
+                  <span class="text-black font-bold">{{ item.number }}</span>
+                </div>
+                <div class="w-1/2 pl-8">
+                  <div class="p-6 rounded-lg transition hover:-translate-y-1
+                    {% if item.completed %}
+                      bg-green-800 shadow-lg hover:shadow-green-400
+                    {% else %}
+                      bg-gray-900 shadow-lg hover:shadow-yellow-400
+                    {% endif %}
+                  ">
+                    <h3 class="text-xl font-semibold {% if item.completed %}text-green-400{% else %}text-yellow-400{% endif %}">
+                      {{ item.title }}
+                    </h3>
+                    <p class="text-gray-400 mt-2">{{ item.desc }}</p>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-4">
+                      <div class="bg-green-400 h-2 rounded-full" style="width: {{ item.progress }}%;"></div>
+                    </div>
+
+                    <!-- Display Progress as X/10 -->
+                    <div class="text-sm text-gray-300 mt-2">{{ item.completed_words }}/{{ item.total_words }} Completed</div>
+
+                    {% if item.completed %}
+                      <a href="{% url item.url pk=item.pk %}" class="mt-4 inline-block bg-green-500 text-black px-4 py-2 rounded-md hover:bg-green-400 transition">Review Quiz</a>
+                    {% else %}
+                      <a href="{% url item.url pk=item.pk %}" class="mt-4 inline-block bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition">Start Quiz</a>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}

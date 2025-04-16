@@ -1,11 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    This is home page
-</body>
-</html>
+{% extends 'base/base.html' %}
+
+{% block content %}
+<section class="text-center py-16 px-4 bg-gradient-to-br from-gray-900 to-gray-800">
+  <h2 class="text-3xl md:text-5xl font-extrabold mb-4 text-yellow-400 leading-tight">Charge Up Your Vocabulary</h2>
+  <p class="text-base sm:text-lg md:text-xl text-gray-300 max-w-md mx-auto mb-6">Master new words, boost your fluency, and zap your way through fun, engaging lessons.</p>
+  <a href="#get-started" class="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-5 rounded-xl transition shadow-lg text-sm sm:text-base">⚡ Get Started</a>
+</section>
+
+<!-- Features Section -->
+<section class="py-14 px-4 bg-gray-950">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div class="bg-gray-900 rounded-xl p-6 shadow-md hover:shadow-yellow-400 transition text-center">
+      <div class="text-yellow-400 text-4xl mb-3">🧠</div>
+      <h3 class="text-lg font-semibold mb-2">Smart Flashcards</h3>
+      <p class="text-gray-400 text-sm">Remember words with spaced repetition and interactive flashcards.</p>
+    </div>
+    <div class="bg-gray-900 rounded-xl p-6 shadow-md hover:shadow-yellow-400 transition text-center">
+      <div class="text-yellow-400 text-4xl mb-3">⚡</div>
+      <h3 class="text-lg font-semibold mb-2">Quick Quizzes</h3>
+      <p class="text-gray-400 text-sm">Test your vocabulary with rapid-fire quizzes and instant feedback.</p>
+    </div>
+    <div class="bg-gray-900 rounded-xl p-6 shadow-md hover:shadow-yellow-400 transition text-center">
+      <div class="text-yellow-400 text-4xl mb-3">📈</div>
+      <h3 class="text-lg font-semibold mb-2">Track Progress</h3>
+      <p class="text-gray-400 text-sm">Visualize your learning journey and stay motivated every day.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="text-center py-16 px-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black">
+  <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">Ready to Spark Your Word Power?</h2>
+  <p class="text-base sm:text-lg mb-5 max-w-md mx-auto">Join Vocavolt and start electrifying your vocabulary today.</p>
+  <a href="#get-started" class="inline-block bg-black hover:bg-gray-800 text-yellow-400 font-semibold py-3 px-6 rounded-xl transition text-sm sm:text-base">⚡ Start Learning</a>
+</section>
+{% endblock content %}
