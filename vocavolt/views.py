@@ -1,4 +1,5 @@
 from django.views.generic import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
@@ -22,7 +23,7 @@ class HomePageView(View):
 
 
 
-class SectionsPageView(View):
+class SectionsPageView(LoginRequiredMixin, View):
     """ Home view """
     template_name = 'sections.html'
 
@@ -68,7 +69,7 @@ class SectionsPageView(View):
 
 
 
-class LearningPageView(View):
+class LearningPageView(LoginRequiredMixin, View):
     """ Home view """
     template_name = 'learning.html'
 
@@ -138,7 +139,7 @@ class LearningPageView(View):
 
 
 
-class FlashCardPageView(View):
+class FlashCardPageView(LoginRequiredMixin, View):
     """ Home view """
     template_name = 'flashcard.html'
 
@@ -185,32 +186,6 @@ class FlashCardPageView(View):
             "total_flashcards": len(all_flashcards)
         }
         return render(request, self.template_name, context)
-
-
-class UpdateUserWordProgress(View):
-    def post(self, request, *args, **kwargs):
-        user = request.user  # Get the logged-in user
-        word_id = request.POST.get('word_id')  # Word ID from the request
-
-        try:
-            # Get the word object
-            word = Word.objects.get(id=word_id)
-        except Word.DoesNotExist:
-            return JsonResponse({'error': 'Word not found'}, status=404)
-
-        # Get or create the UserWordProgress record
-        user_word_progress, created = UserWordProgress.objects.get_or_create(user=user, word=word)
-
-        # Update the last studied timestamp (you can also add more logic to track progress)
-        user_word_progress.last_studied = timezone.now()
-
-        # You can also add any additional logic here to track actual progress
-        # For example, incrementing progress percentage
-        # user_word_progress.progress_percentage = some_calculated_value
-
-        user_word_progress.save()
-
-        return JsonResponse({'success': 'Word progress updated successfully'})
 
 
 @csrf_exempt  # Use this if CSRF token is not included or to handle the CSRF manually

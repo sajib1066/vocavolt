@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, UpdateUserWordProgress, update_word_progress
+from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, update_word_progress
 
 
 urlpatterns = [
