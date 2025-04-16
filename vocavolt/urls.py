@@ -29,7 +29,7 @@ urlpatterns = [
     path('wordpack/<int:pk>/flashcard/', FlashCardPageView.as_view(), name='flashcard'),
     path('wordpack/<int:pk>/quiz/', QuizPageView.as_view(), name='quiz'),
     path('update_word_progress/', update_word_progress, name='update_word_progress'),
-    path('auth/', include('customauth.urls')),
+    path('', include('customauth.urls')),
     path('dashboard/', include('dashboard.urls')),
 ]
 
