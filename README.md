@@ -1,5 +1,5 @@
-# Django Boilerplate
-Boilerplate for any django projects with HTML, CSS, Bootstrap, REST API.
+# Vocavolt
+Charge Up Your Vocabulary
 
 [![python-version](https://img.shields.io/badge/Python-3.11.6-blue)](https://www.python.org/)
 [![django-version](https://img.shields.io/badge/Django-4.2.7-green)](https://www.djangoproject.com/)
@@ -9,7 +9,7 @@ Boilerplate for any django projects with HTML, CSS, Bootstrap, REST API.
 
 1. Create a repository using this template or clone the repository
    ```
-   git clone git@github.com:sajib1066/django-boilerplate.git
+   git clone git@github.com:sajib1066/vocavolt.git
    ```
 2. Create a virtual environment
    ```
@@ -25,25 +25,21 @@ Boilerplate for any django projects with HTML, CSS, Bootstrap, REST API.
    ```
 5. Create local settings
    ```
-   cp examples/local_settings.example django_boilerplate/local_settins.py
+   cp examples/local_settings.example vocavolt/local_settins.py
    ```
 6. Create logs file
    ```
    mkdir logs
    ```
-7. Rename project
-   ```
-   python manage.py renameproject django_boilerplate <your_project_name>
-   ```
-8. Migrate database
+7. Migrate database
    ```
    python manage.py migrate
    ```
-9. Create superuser
+8. Create superuser
     ```
     python manage.py createsuperuser
     ```
-10. Run the project
+9. Run the project
     ```
     python manage.py runserver
     ```
