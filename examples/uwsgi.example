@@ -2,13 +2,13 @@
 # https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/uwsgi/
 
 # the base directory (full path)
-chdir           = /opt/django_boilerplate
+chdir           = /opt/vocavolt
 
 # Django's wsgi file
-module          = project_name.wsgi
+module          = vocavolt.wsgi
 
 # the virtualenv (full path)
-home            = /opt/django_boilerplate/venv
+home            = /opt/vocavolt/venv
 
 # process-related settings
 master          = true
@@ -18,8 +18,8 @@ processes       = 8
 threads         = 2
 enable-threads  = True
 
-# the socket (use the full path to be safe
-socket          = /opt/django_boilerplate/uwsgi/uwsgi.sock
+# the socket (use the full path to be safe)
+socket          = /opt/vocavolt/uwsgi/uwsgi.sock
 
 # ... with appropriate permissions - may be needed
 chmod-socket    = 666
