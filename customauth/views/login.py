@@ -17,7 +17,7 @@ class LoginView(LoginView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('dashboard:dashboard')
+            return redirect('customauth:profile')
         form = self.form_class
         context = {
             'form': form,
@@ -37,7 +37,7 @@ class LoginView(LoginView):
             if user:
                 login(request, user)
                 if next_page == '':
-                    return redirect('dashboard:dashboard')
+                    return redirect('customauth:profile')
                 else:
                     return HttpResponseRedirect(next_page)
             else:

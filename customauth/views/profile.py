@@ -7,7 +7,7 @@ from customauth.models import User
 
 class ProfileView(LoginRequiredMixin, View):
     """ My Profile view """
-    template_name = 'users/profile.html'
+    template_name = 'customauth/profile.html'
 
     def get(self, request):
         context = {

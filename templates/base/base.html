@@ -8,46 +8,78 @@
   <meta name="keywords" content="vocabulary app, learn English, English words, flashcards, vocabulary builder, English practice" />
   <meta name="author" content="Vocavolt Team" />
   <meta name="robots" content="index, follow" />
-
-  <!-- Open Graph -->
   <meta property="og:title" content="Vocavolt – Charge Up Your Vocabulary" />
   <meta property="og:description" content="Master English vocabulary through fun, fast, and smart learning techniques." />
   <meta property="og:image" content="https://yourdomain.com/preview.jpg" />
   <meta property="og:url" content="https://yourdomain.com/" />
   <meta property="og:type" content="website" />
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Vocavolt – Charge Up Your Vocabulary" />
   <meta name="twitter:description" content="Master English vocabulary through fun, fast, and smart learning techniques." />
   <meta name="twitter:image" content="https://yourdomain.com/preview.jpg" />
-
   <link rel="icon" href="/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-950 text-white font-sans">
 
   <!-- Navbar -->
   <header class="bg-gray-900 shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between">
-      <h1 class="text-2xl sm:text-3xl font-bold text-yellow-400 tracking-wide mb-2 sm:mb-0">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <!-- Logo -->
+      <h1 class="text-2xl sm:text-3xl font-bold text-yellow-400 tracking-wide">
         <a href="{% url 'home' %}">Vocavolt ⚡</a>
       </h1>
-      <nav class="space-x-4 text-sm sm:text-base" aria-label="Main navigation">
-        <a href="{% url 'home' %}" class="hover:text-yellow-300 transition">Home</a>
-        <a href="{% url 'sections' %}" class="hover:text-yellow-300 transition">Learn</a>
-        <a href="#" class="hover:text-yellow-300 transition">Quizzes</a>
-        <a href="{% url 'customauth:login' %}" class="hover:text-yellow-300 transition">Login</a>
+
+      <!-- Hamburger Icon -->
+      <button id="navToggle" class="sm:hidden text-yellow-400 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
+      <!-- Navigation Links -->
+      <nav id="navMenu" class="hidden sm:flex flex-col sm:flex-row sm:items-center sm:space-x-6 text-sm sm:text-base absolute sm:static top-20 left-0 right-0 w-full sm:w-auto bg-gray-900 sm:bg-transparent z-50 sm:z-auto shadow sm:shadow-none">
+        <a href="{% url 'home' %}" class="block px-4 py-2 sm:px-0 hover:text-yellow-300 transition">Home</a>
+        <a href="{% url 'sections' %}" class="block px-4 py-2 sm:px-0 hover:text-yellow-300 transition">Learn</a>
+        <a href="#" class="block px-4 py-2 sm:px-0 hover:text-yellow-300 transition">Quizzes</a>
+
+        {% if request.user.is_authenticated %}
+          <!-- Profile Dropdown (Desktop & Mobile) -->
+          <div class="relative inline-block text-left" id="profileDropdownWrapper">
+            <button id="profileDropdownBtn" class="w-10 h-10 rounded-full border-2 border-yellow-400 cursor-pointer flex items-center justify-center relative focus:outline-none">
+              <img src="https://ui-avatars.com/api/?name=Ad" alt="Profile" class="w-full h-full rounded-full object-cover" />
+              <span class="absolute bottom-0 right-0 text-xs text-yellow-400">▼</span>
+            </button>
+            <div id="profileDropdownMenu" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50">
+              <div class="py-1 text-black">
+                <a href="{% url 'customauth:profile' %}" class="flex items-center px-4 py-2 hover:bg-gray-100">
+                  <span class="mr-2">👤</span> Profile
+                </a>
+                <a href="{% url 'home' %}" class="flex items-center px-4 py-2 hover:bg-gray-100">
+                  <span class="mr-2">⚙️</span> Settings
+                </a>
+                <form method="post" action="{% url 'customauth:logout' %}" class="block">
+                  {% csrf_token %}
+                  <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center">
+                    <span class="mr-2">🚪</span> Logout
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <a href="{% url 'customauth:login' %}" class="block px-4 py-2 sm:px-0 hover:text-yellow-300 transition">Login</a>
+        {% endif %}
       </nav>
     </div>
   </header>
-  
 
-  <!-- Hero Section -->
+  <!-- Main Content -->
   <main>
     {% block content %}
     {% endblock content %}
-    
   </main>
 
   <!-- Footer -->
@@ -61,6 +93,34 @@
       </div>
     </div>
   </footer>
+
+  <!-- JavaScript for Toggle & Dropdown -->
+  <script>
+    // Toggle nav menu on small screens
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    navToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('hidden');
+    });
+
+    // Dropdown menu toggle
+    const dropdownBtn = document.getElementById('profileDropdownBtn');
+    const dropdownMenu = document.getElementById('profileDropdownMenu');
+    const wrapper = document.getElementById('profileDropdownWrapper');
+
+    if (dropdownBtn) {
+      dropdownBtn.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!wrapper.contains(event.target)) {
+          dropdownMenu.classList.add('hidden');
+        }
+      });
+    }
+  </script>
 
 </body>
 </html>

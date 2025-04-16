@@ -67,6 +67,19 @@
       </button>
     </form>
 
+    <!-- Social Signups -->
+    <div class="mt-6 space-y-4">
+      <button class="w-full bg-red-600 text-white py-2 rounded-md flex items-center justify-center space-x-3 hover:bg-red-500 transition transform duration-200">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 12.3c0-.6-.1-1.1-.3-1.6h-9.6v3.1h5.5c-.2 1.3-.9 2.4-1.9 3.1v2.5h3c1.8-1.6 2.9-4 2.9-6.1zM10.4 15.1v-3.1h-2.6v3.1h2.6zm1.2-7.5h-3.8v3.1h3.8v-3.1zM9.1 12.3h-.1l-.2-.1h-.2v-.1c.2-.1.2-.2.2-.3h-.2v-.1c0-.2-.1-.3-.3-.3v-.2h.2c.1-.2.3-.2.3-.3h.1c0-.1.1-.1.1-.2v-.1c.2-.1.4-.3.4-.5.2-.2.3-.5.3-.9s-.1-.7-.3-.9c-.2-.2-.5-.3-.9-.3-.3 0-.6.1-.9.2v.4h-.3v-.5c-.3-.1-.6-.2-.9-.2-.4 0-.7.1-1 .3s-.5.5-.5.9.1.7.3.9c.3.3.7.4 1 .3-.3.2-.5.4-.7.6-.2.2-.4.5-.6.8h.1c0-.1.2-.1.2-.1v-.1zM20.5 12.3h-.3c-.2 0-.3.1-.5.1-.1 0-.1.1-.2.1-.4-.1-.7-.1-1.1-.2-.2-.2-.3-.3-.5-.5z"/></svg>
+        <span>Register with Google</span>
+      </button>
+
+      <button class="w-full bg-blue-600 text-white py-2 rounded-md flex items-center justify-center space-x-3 hover:bg-blue-500 transition transform duration-200">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5.5c0-3.1-2.5-5.6-5.5-5.6-2.4 0-4.5 1.6-5.2 3.9h-.3v1.8h1.8c-.1-.5-.2-1.1-.2-1.7 0-1.4.8-2.7 2.1-3.1.4-.1.9-.2 1.3-.2 1.2 0 2.3.5 3 1.3.9 1 1.5 2.3 1.5 3.9s-.6 2.8-1.5 3.9c-.7.8-1.8 1.3-3 1.3-.4 0-.9-.1-1.3-.2-.3-.1-.6-.3-.9-.5-.8-.4-1.5-.9-2.1-1.6-.7-.8-1.1-1.8-1.2-2.9-.2-1-.1-2.1.3-3 .2-.3.4-.6.6-.9.7-.8 1.7-1.4 2.9-1.7-.5 1.2-.8 2.3-.9 3.4-.1 1.2.3 2.3.9 3.2.9 1.3 2.2 2.1 3.6 2.2.4 0 .8-.1 1.2-.1 1.6 0 3 1.2 3 2.7 0 1.6-1.3 2.8-2.9 2.8-2.2 0-4-1.8-4-4.1 0-.6.2-1.2.4-1.7-.7.1-1.4.1-2.1-.1-.3-.1-.7-.2-1.1-.3-.6-.1-.9.3-1.3.6-.2.3-.3.6-.4.9s-.1.6.1.9c.5.6 1.3.9 2.2.9.7 0 1.4-.3 1.9-.7.5-.5.8-.9 1.1-1.5.2-.6.4-1.3.6-2.1.3-.8.4-1.7.4-2.6z"/></svg>
+        <span>Register with Facebook</span>
+      </button>
+    </div>
+
     <p class="mt-6 text-sm text-center text-gray-400">
       Already have an account?
       <a href="{% url 'customauth:login' %}" class="text-yellow-400 hover:underline">Log in here</a>
