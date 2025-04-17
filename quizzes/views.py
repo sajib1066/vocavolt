@@ -3,7 +3,13 @@ from django.db.models import Count
 from django.views import View
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Quiz, UserQuizAttempt, Question
+from django.http import JsonResponse
+from django.utils import timezone
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+
+from .models import Quiz, UserQuizAttempt, Question, UserAnswer
 
 class QuizListView(View):
     template_name = 'quizzes/quizzes.html'
@@ -50,3 +56,34 @@ class QuizView(LoginRequiredMixin, View):
             'questions': questions
         }
         return render(request, self.template_name, context)
+
+
+@csrf_exempt
+@login_required
+def submit_quiz_result(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        data = json.loads(request.body.decode('utf-8'))
+        
+        quiz_id = data.get('quiz_id')
+        score = data.get('score')
+        answers = data.get('answers')
+
+        quiz = Quiz.objects.get(pk=quiz_id)
+        attempt = UserQuizAttempt.objects.create(
+            user=request.user,
+            quiz=quiz,
+            score=score,
+            completed_at=timezone.now()
+        )
+
+        for answer in answers:
+            question = Question.objects.get(pk=answer['question_id'])
+            UserAnswer.objects.create(
+                attempt=attempt,
+                question=question,
+                selected_option=answer['selected_option'],
+                is_correct=(answer['selected_option'] == question.correct_answer)
+            )
+
+        return JsonResponse({'success': True, 'message': 'Result stored successfully.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request.'}, status=400)

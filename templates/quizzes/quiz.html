@@ -107,7 +107,7 @@
             selected_option: selectedAnswers[questionId]
         }));
 
-        fetch("{% url 'submit_quiz_result' %}", {
+        fetch("{% url 'quizzes:submit_quiz_result' %}", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
