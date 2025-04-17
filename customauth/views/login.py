@@ -19,7 +19,7 @@ class LoginView(LoginView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('customauth:profile')
+            return redirect('sections')
         form = self.form_class
         context = {
             'form': form,
@@ -54,7 +54,7 @@ class LoginView(LoginView):
 
                 # Email is verified — login user
                 login(request, user)
-                return redirect(next_page or 'customauth:profile')
+                return redirect(next_page or 'sections')
             else:
                 messages.warning(request, 'Invalid email or password')
         else:

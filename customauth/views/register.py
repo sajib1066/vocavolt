@@ -20,6 +20,8 @@ class RegisterView(View):
     form_class = RegisterForm
 
     def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('sections')
         return render(request, self.template_name, {'form': self.form_class})
 
     def post(self, request, *args, **kwargs):
