@@ -61,6 +61,7 @@ LOCAL_APPS = [
     'dashboard.apps.DashboardConfig',
     'flashcards.apps.FlashcardsConfig',
     'pages.apps.PagesConfig',
+    'subscription.apps.SubscriptionConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

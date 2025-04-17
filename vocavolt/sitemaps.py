@@ -16,6 +16,7 @@ class StaticViewSitemap(Sitemap):
             'pages:privacy_policy',
             'pages:tos',
             'pages:contact',
+            'subscription:pricing',
         ]
 
     def location(self, item):

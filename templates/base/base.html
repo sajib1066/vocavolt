@@ -93,6 +93,7 @@
 
         <a href="{% url 'home' %}" class="nav-link block px-4 py-2 sm:px-0 hover:text-yellow-300 transition-all duration-200 ease-in-out transform hover:scale-105">Home</a>
         <a href="{% url 'sections' %}" class="nav-link block px-4 py-2 sm:px-0 hover:text-yellow-300 transition-all duration-200 ease-in-out transform hover:scale-105">Learn</a>
+        <a href="{% url 'subscription:pricing' %}" class="nav-link block px-4 py-2 sm:px-0 hover:text-yellow-300 transition-all duration-200 ease-in-out transform hover:scale-105">Pricing</a>
         <a href="#" class="nav-link block px-4 py-2 sm:px-0 hover:text-yellow-300 transition-all duration-200 ease-in-out transform hover:scale-105">Quizzes</a>
 
         {% if request.user.is_authenticated %}

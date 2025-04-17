@@ -42,6 +42,7 @@ urlpatterns = [
 
     path('', include('customauth.urls')),
     path('', include('pages.urls')),
+    path('', include('subscription.urls')),
     path('dashboard/', include('dashboard.urls')),
 
     # sitemap
