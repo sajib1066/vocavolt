@@ -47,3 +47,14 @@ class ContactPageView(View):
             'form': form
         }
         return render(request, self.template_name, context)
+
+def error_403_handler(request, *args, **argv):
+    return render(request, 'pages/403.html')
+
+
+def error_404_handler(request, *args, **argv):
+    return render(request, 'pages/404.html')
+
+
+def error_500_handler(request, *args, **argv):
+    return render(request, 'pages/500.html')

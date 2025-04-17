@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic.base import TemplateView
+from django.conf.urls import handler403, handler404, handler500
 
 from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, update_word_progress, QuizPageView, submit_quiz_result
 from .sitemaps import (
@@ -28,6 +29,10 @@ from .sitemaps import (
 sitemaps = {
     'static': StaticViewSitemap,
 }
+
+handler403 = 'pages.views.error_403_handler'
+handler404 = 'pages.views.error_404_handler'
+handler500 = 'pages.views.error_500_handler'
 
 
 urlpatterns = [
