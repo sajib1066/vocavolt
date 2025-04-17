@@ -22,7 +22,7 @@ from django.views.generic.base import TemplateView
 
 from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, update_word_progress, QuizPageView, submit_quiz_result
 from .sitemaps import (
-    StaticViewSitemap, SectionSiteMap,
+    StaticViewSitemap,
 )
 
 sitemaps = {
@@ -43,8 +43,7 @@ urlpatterns = [
     path('', include('customauth.urls')),
     path('', include('pages.urls')),
     path('', include('subscription.urls')),
-    path('', include('quizzes.urls')),
-    path('dashboard/', include('dashboard.urls')),
+    path('quiz/', include('quizzes.urls')),
 
     # sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),

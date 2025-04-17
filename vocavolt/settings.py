@@ -58,7 +58,6 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'customauth.apps.CustomauthConfig',
-    'dashboard.apps.DashboardConfig',
     'flashcards.apps.FlashcardsConfig',
     'pages.apps.PagesConfig',
     'subscription.apps.SubscriptionConfig',
@@ -91,9 +90,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'libraries': {
-                'message_type_checker': 'dashboard.templatetags',
-            }
         },
     },
 ]
