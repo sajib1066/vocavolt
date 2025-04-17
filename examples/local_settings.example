@@ -39,3 +39,5 @@ DB_CONFIG = {
 EMAIL_HOST_USER = "vocavolt@gmail.com"
 EMAIL_HOST_PASSWORD = ""
 DEFAULT_FROM_EMAIL = 'Vocavolt Support <vocavolt@gmail.com>'
+
+OPENAI_API_KEY = ""
