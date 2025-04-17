@@ -170,6 +170,7 @@ class FlashCardPageView(LoginRequiredMixin, View):
         current_flashcard = all_flashcards[index] if all_flashcards else None
 
         context = {
+            "wordpack": wordpack,
             "flashcards": {
                 "list": all_flashcards,
                 "current": current_flashcard,
