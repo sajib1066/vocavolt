@@ -124,12 +124,24 @@
                     </div>
 
                     <!-- Display Progress as X/10 -->
-                    <div class="text-sm text-gray-300 mt-2">{{ item.completed_words }}/{{ item.total_words }} Completed</div>
+                    <div class="text-sm text-gray-300 mt-2">Score: {{ item.total_correct_answers }}/{{ item.total_question }}</div>
+                     <!-- Quiz Status: Completed or Failed -->
+                    <div class="text-sm text-gray-300 mt-2">
+                      {% if item.progress >= 60 %}
+                        <span class="text-green-400 font-semibold">Completed</span>
+                      {% else %}
+                        <span class="text-red-400 font-semibold">Failed</span>
+                      {% endif %}
+                    </div>
 
                     {% if item.completed %}
                       <a href="{% url item.url pk=item.pk %}" class="mt-4 inline-block bg-green-500 text-black px-4 py-2 rounded-md hover:bg-green-400 transition">Review Quiz</a>
                     {% else %}
-                      <a href="{% url item.url pk=item.pk %}" class="mt-4 inline-block bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition">Start Quiz</a>
+                      {% if item.progress <= 60 %}
+                        <a href="{% url item.url pk=item.pk %}" class="mt-4 inline-block bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition">Review Quiz</a>
+                      {% else %}
+                        <a href="{% url item.url pk=item.pk %}" class="mt-4 inline-block bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition">Start Quiz</a>
+                      {% endif %}
                     {% endif %}
                   </div>
                 </div>

@@ -102,6 +102,28 @@
     }
 
     function showResult() {
+        const answers = Object.keys(selectedAnswers).map(questionId => ({
+            question_id: questionId,
+            selected_option: selectedAnswers[questionId]
+        }));
+
+        fetch("{% url 'submit_quiz_result' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: JSON.stringify({
+                quiz_id: "{{ quiz.id }}",
+                score: score,
+                answers: answers
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+
         quizArea.innerHTML = `
             <div class="text-center">
                 <h2 class="text-2xl font-bold mb-4">Quiz Complete!</h2>
@@ -111,7 +133,6 @@
         `;
         highlightIndex(-1);
     }
-
     // Initial render
     renderQuestion(currentQuestionIndex);
 </script>

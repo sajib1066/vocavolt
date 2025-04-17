@@ -1,6 +1,6 @@
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.utils import timezone
 import json
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 
 
-from flashcards.models import Section, WordPack, Quiz, Question, Word, UserWordProgress
+from flashcards.models import Section, WordPack, Quiz, Question, Word, UserWordProgress, UserQuizAttempt, UserAnswer
 
 class HomePageView(View):
     """ Home view """
@@ -102,8 +102,24 @@ class LearningPageView(LoginRequiredMixin, View):
             if index < len(quizes):
                 quiz = quizes[index]
 
+                quiz_attempts = UserQuizAttempt.objects.filter(user=request.user, quiz=quiz)
                 # You can later check actual quiz completion status here
                 is_quiz_completed = False  # Placeholder
+                total_question = 0
+                total_correct_answers = 0
+                score_percentage = 0
+                is_passed = False
+
+                for attempt in quiz_attempts:
+                    total_question = attempt.total_questions
+                    total_correct_answers = attempt.total_correct_answers
+                    score_percentage = attempt.calculate_score_percentage
+                    if attempt.calculate_score_percentage >= 60:
+                        is_quiz_completed = True
+                        is_passed = True
+                        score_percentage = attempt.calculate_score_percentage
+                        total_correct_answers = attempt.total_correct_answers
+                        break
 
                 learning_path.append({
                     'type': 'quiz',
@@ -114,8 +130,11 @@ class LearningPageView(LoginRequiredMixin, View):
                     'pk': quiz.pk,
                     'completed': is_quiz_completed,
                     'locked': not previous_completed,
-                    'progress': 0,
+                    'progress': score_percentage,
+                    'is_passed': is_passed,
                     'completed_words': 0,
+                    'total_question': total_question,
+                    'total_correct_answers': total_correct_answers,
                 })
 
                 previous_completed = is_quiz_completed  # Next wordpack depends on this
@@ -224,3 +243,34 @@ def update_word_progress(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+@csrf_exempt
+@login_required
+def submit_quiz_result(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        data = json.loads(request.body.decode('utf-8'))
+        
+        quiz_id = data.get('quiz_id')
+        score = data.get('score')
+        answers = data.get('answers')
+
+        quiz = Quiz.objects.get(pk=quiz_id)
+        attempt = UserQuizAttempt.objects.create(
+            user=request.user,
+            quiz=quiz,
+            score=score,
+            completed_at=timezone.now()
+        )
+
+        for answer in answers:
+            question = Question.objects.get(pk=answer['question_id'])
+            UserAnswer.objects.create(
+                attempt=attempt,
+                question=question,
+                selected_option=answer['selected_option'],
+                is_correct=(answer['selected_option'] == question.correct_answer)
+            )
+
+        return JsonResponse({'success': True, 'message': 'Result stored successfully.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request.'}, status=400)
