@@ -1,11 +1,9 @@
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.urls import reverse
 from django.http import JsonResponse
 from django.utils import timezone
 import json
-
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 

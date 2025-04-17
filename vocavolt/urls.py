@@ -39,6 +39,7 @@ urlpatterns = [
     path('wordpack/<int:pk>/quiz/', QuizPageView.as_view(), name='quiz'),
     path('update_word_progress/', update_word_progress, name='update_word_progress'),
     path('', include('customauth.urls')),
+    path('', include('pages.urls')),
     path('dashboard/', include('dashboard.urls')),
 
     # sitemap

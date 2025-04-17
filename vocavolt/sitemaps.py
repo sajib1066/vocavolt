@@ -14,6 +14,8 @@ class StaticViewSitemap(Sitemap):
             'customauth:login',
             'customauth:register',
             'sections',
+            'pages:privacy_policy',
+            'pages:tos',
         ]
 
     def location(self, item):
