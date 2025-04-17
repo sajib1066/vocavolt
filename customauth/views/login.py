@@ -90,7 +90,7 @@ class ForgotPasswordView(View):
                     user.email_token = token
                     user.save()
 
-                    reset_path = reverse_lazy('set_password', kwargs={
+                    reset_path = reverse_lazy('customauth:set_password', kwargs={
                         'token': token,
                     })
 
