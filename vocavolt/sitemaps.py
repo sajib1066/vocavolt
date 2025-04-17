@@ -13,6 +13,7 @@ class StaticViewSitemap(Sitemap):
             'home',
             'customauth:login',
             'customauth:register',
+            'customauth:forgot_password',
             'pages:privacy_policy',
             'pages:tos',
             'pages:contact',
