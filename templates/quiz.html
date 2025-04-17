@@ -1,57 +1,118 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-center mb-8">{{ quiz.title }}</h1>
+<div class="flex-grow flex flex-col items-center px-4 py-8">
 
-    <div class="space-y-6">
-        {% for question in questions %}
-            <div class="quiz-question">
-                <p class="text-xl font-semibold">{{ question.prompt }}</p>
-                
-                <div class="quiz-options space-y-4">
-                    {% for option in question.options %}
-                        <button class="w-full p-4 bg-white border-2 border-gray-300 rounded-lg text-lg font-semibold hover:bg-gray-100 focus:outline-none transition duration-200 ease-in-out">
-                            <span class="text-gray-700">{{ option }}</span>
-                        </button>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endfor %}
+    <!-- 🔙 Back Button -->
+    <div class="mb-6 w-full max-w-6xl">
+        <a href="{% url 'learn' quiz.section.pk %}" class="inline-flex items-center text-yellow-400 hover:text-yellow-500 font-semibold text-sm">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Learning Path
+        </a>
     </div>
 
-    <div class="text-center mt-8">
-        <button class="px-6 py-3 bg-green-500 text-white text-lg font-semibold rounded-lg hover:bg-green-600 transition duration-200 focus:outline-none" onclick="submitQuiz()">Submit Quiz</button>
+    <div class="w-full max-w-6xl bg-white/10 backdrop-blur border border-gray-700 rounded-2xl shadow-xl px-6 py-8 space-y-6">
+
+        <h1 class="text-3xl font-bold text-center mb-6">{{ quiz.title }}</h1>
+
+        <!-- Question Index Circles -->
+        <div class="flex justify-center gap-3 mb-6">
+            {% for question in questions %}
+                <div id="q-index-{{ forloop.counter0 }}"
+                    class="w-8 h-8 rounded-full flex items-center justify-center border-2 text-sm font-bold 
+                    border-gray-400 text-gray-300 transition-all duration-200">
+                    {{ forloop.counter }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Current Question Display -->
+        <div id="quiz-area" class="space-y-6">
+            <!-- Dynamic Question Rendering Here -->
+        </div>
+
     </div>
 </div>
 
 <script>
-    // Store selected answers in a dictionary
-    let selectedAnswers = {};
+    const questions = [
+        {% for question in questions %}
+            {
+                id: "{{ question.id }}",
+                prompt: `{{ question.prompt|escapejs }}`,
+                options: {{ question.options|safe }},
+                correct: `{{ question.correct_answer|escapejs }}`
+            },
+        {% endfor %}
+    ];
 
-    // Handle option selection
-    function selectOption(questionId, selectedOption) {
-        selectedAnswers[questionId] = selectedOption;
+    let currentQuestionIndex = 0;
+    let selectedAnswers = {};
+    let score = 0;
+
+    const quizArea = document.getElementById("quiz-area");
+
+    function renderQuestion(index) {
+        const question = questions[index];
+        highlightIndex(index);
+
+        quizArea.innerHTML = `
+            <div class="text-xl font-semibold">${question.prompt}</div>
+            <div class="grid gap-4">
+                ${question.options.map(option => `
+                    <button onclick="submitAnswer('${question.id}', '${option}')"
+                        class="w-full p-4 bg-white border-2 border-gray-300 rounded-lg text-lg font-semibold 
+                        hover:bg-gray-100 text-gray-700 transition duration-200 ease-in-out">
+                        ${option}
+                    </button>
+                `).join("")}
+            </div>
+        `;
     }
 
-    // Handle quiz submission
-    function submitQuiz() {
-        // Loop through the selected answers and check if they're correct
-        let correctAnswers = {};
-        {% for question in questions %}
-            correctAnswers["{{ question.id }}"] = "{{ question.correct_answer }}";
-        {% endfor %}
-
-        let score = 0;
-        for (const [questionId, selectedOption] of Object.entries(selectedAnswers)) {
-            if (selectedOption === correctAnswers[questionId]) {
-                score++;
+    function highlightIndex(index) {
+        for (let i = 0; i < questions.length; i++) {
+            const el = document.getElementById(`q-index-${i}`);
+            if (el) {
+                if (i === index) {
+                    el.classList.remove('border-gray-400', 'text-gray-300');
+                    el.classList.add('border-yellow-400', 'text-yellow-400');
+                } else {
+                    el.classList.remove('border-yellow-400', 'text-yellow-400');
+                    el.classList.add('border-gray-400', 'text-gray-300');
+                }
             }
         }
-
-        // Show score or process the result here
-        alert("You scored " + score + " out of {{ questions.count }}");
     }
-</script>
 
+    function submitAnswer(questionId, selectedOption) {
+        selectedAnswers[questionId] = selectedOption;
+        if (selectedOption === questions[currentQuestionIndex].correct) {
+            score++;
+        }
+
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            renderQuestion(currentQuestionIndex);
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        quizArea.innerHTML = `
+            <div class="text-center">
+                <h2 class="text-2xl font-bold mb-4">Quiz Complete!</h2>
+                <p class="text-lg">You scored <strong>${score}</strong> out of <strong>${questions.length}</strong>.</p>
+                <a href="{% url 'learn' quiz.section.pk %}" class="mt-6 inline-block px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">Go to Learning Path</a>
+            </div>
+        `;
+        highlightIndex(-1);
+    }
+
+    // Initial render
+    renderQuestion(currentQuestionIndex);
+</script>
 {% endblock %}
