@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<main class="max-w-3xl mx-auto px-4 py-12">
+  <h1 class="text-4xl font-extrabold text-center text-yellow-600 mb-10">📬 Contact Us</h1>
+
+  <div class="bg-white p-8 rounded-2xl shadow-md space-y-6">
+    <p class="text-gray-700 text-lg">
+      We'd love to hear from you! Whether you have a question, suggestion, or need support, fill out the form below and we'll get back to you as soon as possible.
+    </p>
+
+    <form method="POST" action="" class="space-y-6">
+      {% csrf_token %}
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-800 mb-1">Your Name</label>
+        <input type="text" name="name" id="name" required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-800 mb-1">Email Address</label>
+        <input type="email" name="email" id="email" required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <div>
+        <label for="subject" class="block text-sm font-medium text-gray-800 mb-1">Subject</label>
+        <input type="text" name="subject" id="subject"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <div>
+        <label for="message" class="block text-sm font-medium text-gray-800 mb-1">Your Message</label>
+        <textarea name="message" id="message" rows="5" required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"></textarea>
+      </div>
+
+      <div class="text-right">
+        <button type="submit"
+          class="bg-blue-500 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-200">
+          ✉️ Send Message
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Optional: Contact Info -->
+  <div class="mt-10 text-center text-gray-600">
+    <p>📧 Email us directly: <a href="mailto:support@example.com" class="text-blue-600 hover:underline">support@bongochat.com.bd</a></p>
+    <p>📍 Location: Dhaka, Bangladesh</p>
+  </div>
+</main>
+{% endblock content %}

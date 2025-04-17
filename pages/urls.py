@@ -8,4 +8,5 @@ app_name = "pages"
 urlpatterns = [
     path('privacy-policy/', views.PrivacyPolicyPageView.as_view(), name="privacy_policy"),
     path('tos/', views.TermsOfServicePageView.as_view(), name="tos"),
+    path('contact-us/', views.ContactPageView.as_view(), name="contact"),
 ]

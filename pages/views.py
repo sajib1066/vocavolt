@@ -18,3 +18,12 @@ class TermsOfServicePageView(View):
     def get(self, request, *args, **kwargs):
         context = {}
         return render(request, self.template_name, context)
+
+
+class ContactPageView(View):
+    """ Contact view """
+    template_name = 'pages/contact.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        return render(request, self.template_name, context)
