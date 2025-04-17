@@ -35,6 +35,15 @@
     <h2 class="text-xl font-semibold text-center text-yellow-300 mb-4">Welcome Back</h2>
 
     <form action="" method="POST" class="space-y-5">
+      {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+            <div class="bg-green-100 text-green-800 px-4 py-3 rounded-lg shadow">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
       {% csrf_token %}
       <div>
         <label for="email" class="block text-sm text-gray-300">Email</label>

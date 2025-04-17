@@ -1,27 +1,26 @@
 import logging
-from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.views.generic import View
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.contrib.auth import login
+import uuid
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.urls import reverse
 
 from customauth.forms import RegisterForm
 from customauth.models import User
+from customauth.send_mail import send_confirmation_email
 
 logger = logging.getLogger(__name__)
 
 
-class RegisterView(LoginView):
-    """ Custom login view """
+class RegisterView(View):
     template_name = 'customauth/register.html'
     form_class = RegisterForm
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class
-        context = {
-            'form': form,
-        }
-        return render(request, self.template_name, context)
+        return render(request, self.template_name, {'form': self.form_class})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -30,23 +29,44 @@ class RegisterView(LoginView):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             confirm_password = form.cleaned_data['confirm_password']
-            if password == confirm_password:
-                user = User.objects.create_user(
-                    email=email,
-                    password=password
-                )
-                user.profile.name = name
-                user.profile.save()
-                return redirect('customauth:login')
-            else:
+
+            if password != confirm_password:
                 messages.warning(request, "Passwords do not match")
-        else:
-            print(form.errors)
-            logger.error(f'Invalid form data: {form.errors}')
-            messages.warning(
-                request, 'Invalid email or password. Please enter correctly.'
+                return render(request, self.template_name, {'form': form})
+
+            # Generate token and create user
+            token = str(uuid.uuid4())
+            user = User.objects.create_user(
+                email=email,
+                password=password,
+                is_active=False,
+                email_token=token
             )
-        context = {
-            'form': form,
-        }
-        return render(request, self.template_name, context)
+            user.profile.name = name
+            user.profile.save()
+
+            # Build confirmation link
+            confirm_url = request.build_absolute_uri(
+                reverse('customauth:confirm_email', kwargs={'token': token})
+            )
+
+            # ✅ Use your reusable function
+            send_confirmation_email(confirm_url, user)
+
+            messages.success(request, 'Please check your email to confirm your account.')
+            return redirect('customauth:login')
+
+        messages.warning(request, 'There was a problem with your registration.')
+        return render(request, self.template_name, {'form': form})
+
+
+def confirm_email(request, token):
+    user = get_object_or_404(User, email_token=token, is_active=False)
+
+    user.is_active = True
+    user.verified_email = True
+    user.email_token = None  # Invalidate token
+    user.save()
+    login(request, user)
+    messages.success(request, "Email confirmed! You can now log in.")
+    return redirect('sections')

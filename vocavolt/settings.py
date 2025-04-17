@@ -13,7 +13,8 @@ import os
 
 from .local_settings import (
     SECRET_KEY, DEBUG, ALLOWED_HOSTS, DB_CONFIG,
-    TEMPLATES_DIR, STATICFILES_DIR, STATIC_DIR, MEDIA_DIR, LOGS_DIR
+    TEMPLATES_DIR, STATICFILES_DIR, STATIC_DIR, MEDIA_DIR, LOGS_DIR,
+    EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, DEFAULT_FROM_EMAIL
 )
 from vocavolt.logging import LOGGING
 
@@ -168,3 +169,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 if os.getenv('DISABLE_LOGGING', False):  # for celery in jenkins ci only
     LOGGING_CONFIG = None
 LOGGING = LOGGING  # logging.py
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
