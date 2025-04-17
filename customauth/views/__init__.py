@@ -1,4 +1,4 @@
-from .login import LoginView, ForgotPasswordView
+from .login import LoginView, ForgotPasswordView, SetNewPasswordView
 from .logout import user_logout
 from .profile import ProfileView, UserProfileView
 from .register import RegisterView, confirm_email
@@ -12,4 +12,5 @@ __all__ = [
     UserProfileView,
     confirm_email,
     ForgotPasswordView,
+    SetNewPasswordView,
 ]

@@ -1,4 +1,5 @@
 import logging
+import uuid
 from django.contrib.auth.views import LoginView
 from django.views.generic import View
 from django.shortcuts import render, redirect
@@ -6,14 +7,11 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.crypto import get_random_string
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 
 from customauth.models import User
-from customauth.forms import LoginForm, ForgotPasswordForm
+from customauth.forms import LoginForm, ForgotPasswordForm, SetPasswordForm
 from customauth.send_mail import send_confirmation_email, send_password_reset_email
 
 logger = logging.getLogger(__name__)
@@ -87,11 +85,12 @@ class ForgotPasswordView(View):
 
             if users.exists():
                 for user in users:
-                    uid = urlsafe_base64_encode(force_bytes(user.pk))
-                    token = default_token_generator.make_token(user)
+                    token = str(uuid.uuid4())
+
+                    user.email_token = token
+                    user.save()
 
                     reset_path = reverse_lazy('password_reset_confirm', kwargs={
-                        'uidb64': uid,
                         'token': token,
                     })
 
@@ -107,3 +106,56 @@ class ForgotPasswordView(View):
             return redirect('customauth:forgot_password')
 
         return render(request, self.template_name, {'form': form})
+
+
+class SetNewPasswordView(View):
+    template_name = "customauth/set_password.html"
+    form_class = SetPasswordForm
+
+    def get(self, request, *args, **kwargs):
+        token = kwargs.get('token')  # Assuming the token is passed in the URL
+        try:
+            user = User.objects.get(email_token=token)  # Get the user by ID
+            
+            # Verify token
+            if token == user.email_token:
+                form = self.form_class()
+                context = {
+                    'form': form,
+                    'token': token,
+                }
+                return render(request, self.template_name, context)
+            else:
+                messages.error(request, "Invalid or expired token.")
+                return redirect('customauth:login')
+        except Exception as e:
+            messages.error(request, "Something went wrong. Please try again.")
+            return redirect('customauth:login')
+
+    def post(self, request, *args, **kwargs):
+        token = kwargs.get('token')
+        try:
+            user = User.objects.get(email_token=token)
+
+            # Verify token again
+            if token == user.email_token:
+                form = self.form_class(request.POST)
+                if form.is_valid():
+                    # Set the new password
+                    new_password = form.cleaned_data['password']
+                    user.set_password(new_password)
+                    user.save()
+                    messages.success(request, "Your password has been reset successfully.")
+                    return redirect('customauth:login')
+                else:
+                    context = {
+                        'form': form,
+                        'token': token,
+                    }
+                    return render(request, self.template_name, context)
+            else:
+                messages.error(request, "Invalid or expired token.")
+                return redirect('customauth:login')
+        except Exception as e:
+            messages.error(request, "Something went wrong. Please try again.")
+            return redirect('customauth:login')
