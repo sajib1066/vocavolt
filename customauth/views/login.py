@@ -48,7 +48,7 @@ class LoginView(LoginView):
 
                     # Create confirmation link
                     confirmation_link = request.build_absolute_uri(
-                        reverse('customauth:confirm_email', args=[user.email_token])
+                        reverse('customauth:set_password', args=[user.email_token])
                     )
 
                     # Send confirmation email
@@ -90,7 +90,7 @@ class ForgotPasswordView(View):
                     user.email_token = token
                     user.save()
 
-                    reset_path = reverse_lazy('password_reset_confirm', kwargs={
+                    reset_path = reverse_lazy('set_password', kwargs={
                         'token': token,
                     })
 
