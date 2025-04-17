@@ -36,6 +36,8 @@ class Word(models.Model):
     word = models.CharField(max_length=100)
     part_of_speech = models.CharField(max_length=50)
     translation = models.CharField(max_length=200)
+    synonyms = models.CharField(max_length=255, blank=True, null=True)
+    antonyms = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     examples = models.JSONField(default=list)  # Store as a list of example sentences
 
