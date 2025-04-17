@@ -29,9 +29,7 @@ class SectionsPageView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         sections = Section.objects.all().order_by('order')  # Make sure sections are ordered
-        section_data = []
-
-        previous_completed = True  # First section should be unlocked
+        section_data = []# First section should be unlocked
 
         for section in sections:
             wordpacks = WordPack.objects.filter(section=section)
@@ -46,22 +44,15 @@ class SectionsPageView(LoginRequiredMixin, View):
             is_completed = total_words > 0 and completed_words == total_words
             progress_percentage = int((completed_words / total_words) * 100) if total_words else 0
 
-            # Section is locked if the previous one was not completed
-            is_locked = not previous_completed
-
             section_data.append({
                 'pk': section.pk,
                 'title': section.title,
                 'description': section.description,
                 'completed': is_completed,
-                'locked': is_locked,
                 'completed_words': completed_words,
                 'total_words': total_words,
                 'progress_percentage': progress_percentage,
             })
-
-            # Update previous_completed for the next loop
-            previous_completed = is_completed
 
         context = {
             'sections': section_data
