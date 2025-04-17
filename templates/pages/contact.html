@@ -10,29 +10,35 @@
     </p>
 
     <form method="POST" action="" class="space-y-6">
+        {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+            <div class="bg-green-100 text-green-800 px-4 py-3 rounded-lg shadow">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
       {% csrf_token %}
       <div>
         <label for="name" class="block text-sm font-medium text-gray-800 mb-1">Your Name</label>
-        <input type="text" name="name" id="name" required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        {{ form.name }}
       </div>
 
       <div>
         <label for="email" class="block text-sm font-medium text-gray-800 mb-1">Email Address</label>
-        <input type="email" name="email" id="email" required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        {{ form.email }}
       </div>
 
       <div>
         <label for="subject" class="block text-sm font-medium text-gray-800 mb-1">Subject</label>
-        <input type="text" name="subject" id="subject"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        {{ form.subject }}
       </div>
 
       <div>
         <label for="message" class="block text-sm font-medium text-gray-800 mb-1">Your Message</label>
-        <textarea name="message" id="message" rows="5" required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"></textarea>
+        {{ form.message }}
       </div>
 
       <div class="text-right">
