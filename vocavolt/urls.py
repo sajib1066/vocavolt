@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic.base import TemplateView
 
-from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, update_word_progress, QuizPageView
+from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, update_word_progress, QuizPageView, submit_quiz_result
 from .sitemaps import (
     StaticViewSitemap, SectionSiteMap,
 )
@@ -38,6 +38,8 @@ urlpatterns = [
     path('wordpack/<int:pk>/flashcard/', FlashCardPageView.as_view(), name='flashcard'),
     path('wordpack/<int:pk>/quiz/', QuizPageView.as_view(), name='quiz'),
     path('update_word_progress/', update_word_progress, name='update_word_progress'),
+    path('submit-quiz-result/', submit_quiz_result, name='submit_quiz_result'),
+
     path('', include('customauth.urls')),
     path('', include('pages.urls')),
     path('dashboard/', include('dashboard.urls')),

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Section, WordPack, Word, Quiz, Question, UserWordProgress
+from .models import Section, WordPack, Word, Quiz, Question, UserWordProgress, UserQuizAttempt, UserAnswer
 
 
 class WordInline(admin.TabularInline):
@@ -66,3 +66,13 @@ class QuestionAdmin(admin.ModelAdmin):
 @admin.register(UserWordProgress)
 class UserWordProgressAdmin(admin.ModelAdmin):
     list_display = ['pk', 'user', 'word']
+
+
+@admin.register(UserQuizAttempt)
+class UserQuizAttemptAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'quiz']
+
+
+@admin.register(UserAnswer)
+class UserAnswerAdmin(admin.ModelAdmin):
+    list_display = ['id', 'attempt', 'question']
