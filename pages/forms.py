@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+
 from .models import Contact
 
 
@@ -25,3 +27,10 @@ class ContactForm(forms.ModelForm):
                 'placeholder': 'Your message...'
             }),
         }
+    
+    def clean_message(self):
+        message = self.cleaned_data.get('message', '')
+        word_count = len(message.split())
+        if word_count > 250:
+            raise ValidationError("Message cannot exceed 250 words. You entered {} words.".format(word_count))
+        return message

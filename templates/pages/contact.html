@@ -39,6 +39,9 @@
       <div>
         <label for="message" class="block text-sm font-medium text-gray-800 mb-1">Your Message</label>
         {{ form.message }}
+        {% for error in form.message.errors %}
+          <p class="text-sm text-red-500 mt-1">{{ error }}</p>
+        {% endfor %}
       </div>
 
       <div class="text-right">
