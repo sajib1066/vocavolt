@@ -63,6 +63,7 @@ LOCAL_APPS = [
     'pages.apps.PagesConfig',
     'subscription.apps.SubscriptionConfig',
     'quizzes.apps.QuizzesConfig',
+    'dashboard.apps.DashboardConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

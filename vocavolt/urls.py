@@ -49,6 +49,7 @@ urlpatterns = [
     path('', include('pages.urls')),
     path('', include('subscription.urls')),
     path('quiz/', include('quizzes.urls')),
+    path('dash/', include('dashboard.urls')),
 
     # sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
