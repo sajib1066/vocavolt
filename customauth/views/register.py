@@ -54,8 +54,7 @@ class RegisterView(View):
 
             # ✅ Use your reusable function
             send_confirmation_email(confirm_url, user)
-
-            messages.success(request, 'Please check your email to confirm your account.')
+            messages.success(request, "✅ We've sent you a confirmation email. Please check your inbox or spam folder to activate your account.")
             return redirect('customauth:login')
 
         messages.warning(request, 'There was a problem with your registration.')
