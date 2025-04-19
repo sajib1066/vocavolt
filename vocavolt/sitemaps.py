@@ -19,6 +19,7 @@ class StaticViewSitemap(Sitemap):
             'pages:contact',
             'subscription:pricing',
             'quizzes:quizzes',
+            'vocablogs:list',
         ]
 
     def location(self, item):
