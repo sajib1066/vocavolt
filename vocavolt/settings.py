@@ -54,7 +54,15 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    
+    # https://pypi.org/project/django-taggit/
+    'taggit',
+    # https://django-ckeditor.readthedocs.io/en/latest/
+    'ckeditor',
+    'ckeditor_uploader',
+    # https://pypi.org/project/django-quill-editor/
+    'django_quill',
+    # https://django-crispy-forms.readthedocs.io/en/latest/install.html#installing-django-crispy-forms
+    'crispy_forms',
 ]
 
 LOCAL_APPS = [
@@ -64,6 +72,7 @@ LOCAL_APPS = [
     'subscription.apps.SubscriptionConfig',
     'quizzes.apps.QuizzesConfig',
     'dashboard.apps.DashboardConfig',
+    'vocablogs.apps.VocablogsConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -179,3 +188,37 @@ EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 OPENAI_API_KEY = OPENAI_API_KEY
+
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'  # noqa
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 250,
+        'width': 750,
+    }
+}
+
+QUILL_CONFIGS = {
+    'default':{
+        'theme': 'snow',
+        'modules': {
+            'syntax': True,
+            'toolbar': [
+                [
+                    {'font': []},
+                    {'header': []},
+                    {'align': []},
+                    'bold', 'italic', 'underline', 'strike', 'blockquote',
+                    {'color': []},
+                    {'background': []},
+                ],
+                ['code-block', 'link'],
+                ['clean'],
+            ]
+        }
+    }
+}
+
+CRISPY_TEMPLATE_PACK = 'uni_form'

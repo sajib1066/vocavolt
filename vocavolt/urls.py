@@ -37,6 +37,7 @@ handler500 = 'pages.views.error_500_handler'
 
 urlpatterns = [
     path('management/', admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('', HomePageView.as_view(), name='home'),
     path('section/<int:pk>/learn/', LearningPageView.as_view(), name='learn'),
     path('sections/', SectionsPageView.as_view(), name='sections'),
@@ -50,6 +51,7 @@ urlpatterns = [
     path('', include('subscription.urls')),
     path('quiz/', include('quizzes.urls')),
     path('dash/', include('dashboard.urls')),
+    path('vocablog/', include('vocablogs.urls')),
 
     # sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
