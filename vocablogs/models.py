@@ -51,4 +51,4 @@ class Article(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return f'/articles/{self.slug}/'
+        return f'/vocablog/{self.slug}/'

@@ -23,11 +23,12 @@ from django.conf.urls import handler403, handler404, handler500
 
 from .views import HomePageView, LearningPageView, FlashCardPageView, SectionsPageView, update_word_progress, QuizPageView, submit_quiz_result
 from .sitemaps import (
-    StaticViewSitemap,
+    StaticViewSitemap, VocablogsSiteMap
 )
 
 sitemaps = {
     'static': StaticViewSitemap,
+    'vocablogs': VocablogsSiteMap,
 }
 
 handler403 = 'pages.views.error_403_handler'

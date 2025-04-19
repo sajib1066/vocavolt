@@ -1,7 +1,7 @@
 from django.contrib.sitemaps import Sitemap
 from django.shortcuts import reverse
 
-from flashcards.models import Section
+from vocablogs.models import Article
 
 
 class StaticViewSitemap(Sitemap):
@@ -25,6 +25,6 @@ class StaticViewSitemap(Sitemap):
         return reverse(item)
 
 
-class SectionSiteMap(Sitemap):
+class VocablogsSiteMap(Sitemap):
     def items(self):
-        return Section.objects.all()
+        return Article.objects.all()

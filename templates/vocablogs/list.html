@@ -1,5 +1,52 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Vocablogs</h1>
 
+  <!-- Categories -->
+  <div class="flex gap-3 overflow-x-auto mb-8">
+    {% for category in categories %}
+      <a href="#" class="whitespace-nowrap px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-100 text-sm text-gray-700">
+        {{ category.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Articles Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for article in object_list %}
+      <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">
+          <a href="{{ article.get_absolute_url }}" class="hover:underline">
+            {{ article.title }}
+          </a>
+        </h2>
+        <p class="text-gray-600 text-sm mb-4">
+          {{ article.short_description|truncatechars:100 }}
+        </p>
+        <a href="{{ article.get_absolute_url }}" class="text-blue-600 text-sm font-medium hover:underline">Read more →</a>
+      </div>
+    {% empty %}
+      <div class="col-span-full text-center text-gray-500">
+        No articles found.
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  <div class="mt-10 flex justify-center">
+    <div class="inline-flex items-center space-x-2">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200">Previous</a>
+      {% endif %}
+
+      <span class="px-3 py-1 text-sm text-gray-700">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200">Next</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock content %}
